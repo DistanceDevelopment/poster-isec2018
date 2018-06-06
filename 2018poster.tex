@@ -28,10 +28,11 @@
 %\usepackage{fontspec}
 %\setmainfont{FreeSerif}
 %\setsansfont{FreeSans}
-
+\usetikzlibrary{positioning}
 \usepackage [sfdefault]{cabin}
 \usepackage[T1]{fontenc}
 \usepackage{natbib}
+\usepackage{wrapfig}
 
 \author{Eric Rexstad, David L. Miller, Laura Marshall and Len Thomas}
 \title{\parbox{0.6\linewidth}{\centering Migrating distance sampling projects from Distance for Windows to the Distance R package}}
@@ -71,6 +72,79 @@
 %% Uncomment to switch off tikzposter footer
 \tikzposterlatexaffectionproofoff
 
+%%%%%%%%%%%%%%%  Yet another multi-logo title solution from THIS WORKS after adding \usetikzlibrary{positioning}
+% https://tex.stackexchange.com/questions/263563/add-logos-beyond-the-title-tikzposter
+
+\makeatletter
+\newcommand\insertlogoi[2][]{\def\@insertlogoi{\includegraphics[#1]{#2}}}
+\newcommand\insertlogoii[2][]{\def\@insertlogoii{\includegraphics[#1]{#2}}}
+\newcommand\insertlogoiii[2][]{\def\@insertlogoiii{\includegraphics[#1]{#2}}}
+\newcommand\insertlogoiv[2][]{\def\@insertlogoiv{\includegraphics[#1]{#2}}}
+\newlength\LogoHSep
+\newlength\LogoVSep
+
+\setlength\LogoHSep{60pt}
+\setlength\LogoVSep{1cm}
+
+\insertlogoi[width=7cm]{ISEC_Logo_light_background_RGB.png}
+\insertlogoii[width=7cm]{CREEM_Logo_trans.png}
+\insertlogoiii[width=6cm]{02-foundation-vertical-white.png}
+\insertlogoiv[width=12cm]{distancelogo.png}
+
+\renewcommand\maketitle[1][]{  % #1 keys
+	\normalsize
+	\setkeys{title}{#1}
+	% Title dummy to get title height
+	\node[transparent,inner sep=\TP@titleinnersep, line width=\TP@titlelinewidth, anchor=north, minimum width=\TP@visibletextwidth-2\TP@titleinnersep]
+	(TP@title) at ($(0, 0.5\textheight-\TP@titletotopverticalspace)$) {\parbox{\TP@titlewidth-2\TP@titleinnersep}{\TP@maketitle}};
+	\draw let \p1 = ($(TP@title.north)-(TP@title.south)$) in node {
+		\setlength{\TP@titleheight}{\y1}
+		\setlength{\titleheight}{\y1}
+		\global\TP@titleheight=\TP@titleheight
+		\global\titleheight=\titleheight
+	};
+	
+	% Compute title position
+	\setlength{\titleposleft}{-0.5\titlewidth}
+	\setlength{\titleposright}{\titleposleft+\titlewidth}
+	\setlength{\titlepostop}{0.5\textheight-\TP@titletotopverticalspace}
+	\setlength{\titleposbottom}{\titlepostop-\titleheight}
+	
+	% Title style (background)
+	\TP@titlestyle
+	
+	% Title node
+	\node[inner sep=\TP@titleinnersep, line width=\TP@titlelinewidth, anchor=north, minimum width=\TP@visibletextwidth-2\TP@titleinnersep]
+	at (0,0.5\textheight-\TP@titletotopverticalspace)
+	(title)
+	{\parbox{\TP@titlewidth-2\TP@titleinnersep}{\TP@maketitle}};
+	
+	\node[inner sep=0pt,anchor=west]
+	at ([shift={(-\LogoHSep,\LogoVSep)}]title.west)
+	(logo1)
+	{\@insertlogoi};
+	
+	\node[inner sep=0pt,anchor=west,right=of logo1] 
+	(logo2)
+	{\@insertlogoii};
+	
+	\node[inner sep=0pt,anchor=east] 
+	at ([shift={(\LogoHSep,\LogoVSep)}]title.east)
+	(logo4)
+	{\@insertlogoiv};
+	
+	\node[inner sep=0pt,left=of logo4] 
+	(logo4)
+	{\@insertlogoiii};
+	
+	% Settings for blocks
+	\normalsize
+	\setlength{\TP@blocktop}{\titleposbottom-\TP@titletoblockverticalspace}
+}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{document}
 \maketitle
 
@@ -99,26 +173,32 @@ Challenges hindering the transition between analysis with the GUI and analyses i
 
 \block{How to bridge between the two?}{
 
-\begin{tikzfigure}[Database structure of a Distance project.]
-	\includegraphics[width=0.3\linewidth]{dst-file-structure.PNG}
-\end{tikzfigure}
+Distance GUI projects contain essential information necessary to conduct an analysis.  The fundamental purpose of the \texttt{readdst} package is to access this information and place it into R objects for further scrutiny.
+ 
 
-Distance project \textbf{\texttt{(.dst)}} file contains:
+
+\begin{wrapfigure}[12]{l}{0.6\linewidth}
+	\begin{tikzfigure}
+		\includegraphics[width=.85\linewidth]{dst-file-structure.PNG}
+	\end{tikzfigure}
+	\caption{Database structure of a Distance project.}
+\end{wrapfigure}
+
+The elements of a distance sampling analysis are contained inside Distance project files in the form of an Access database.
 
 \begin{enumerate}
-\item Data
-\item model definitions
-\item analysis results
+	\item Data
+	\item model definitions
+	\item analysis results
 \end{enumerate}
 
-within an Access database.
+Mining information from tables within the database, via either \texttt{RODBC} (Windows) or \texttt{mdb-tools} (Macs).  Then it is a matter of performing the following three steps.
 
 \begin{itemize}
 	\item Trick is to extract contents of (2) and translate into R code
 	\item Target the results of previous step to contents of (1) the data
 	\item Perhaps contrast results of R analysis with results stored in the Access database
 \end{itemize}
-
 
 }
 
@@ -166,12 +246,12 @@ within an Access database.
 
 \block{Additional information}{
 
-\innerblock{Literature}{
+\coloredbox[]{
 \nocite{*} % Insert publications even if they are not cited in the poster
 \small{\bibliographystyle{humannat}
 	\bibliography{isecposter}\vspace{0.75in}}
 }
-\item QR codes to package/website/bioRxiv
+QR codes to package/website/bioRxiv
 
 }
 
