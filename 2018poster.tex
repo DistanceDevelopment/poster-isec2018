@@ -1,0 +1,181 @@
+\documentclass[14pt,a1paper,landscape]{tikzposter}
+
+%% Tikzposter is highly customizable: please see
+%% https://bitbucket.org/surmann/tikzposter/downloads/styleguide.pdf
+
+%% Available themes: see also
+%% https://bitbucket.org/surmann/tikzposter/downloads/themes.pdf
+% \usetheme{Default}
+% \usetheme{Rays}
+% \usetheme{Basic}
+% \usetheme{Simple}
+ \usetheme{Envelope}
+% \usetheme{Wave}
+% \usetheme{Board}
+% \usetheme{Autumn}
+% \usetheme{Desert}
+
+%% Further changes to the title etc is possible
+% \usetitlestyle{Default}
+% \usetitlestyle{Basic}
+ \usetitlestyle{Empty}
+% \usetitlestyle{Filled}
+% \usetitlestyle{Envelope}
+% \usetitlestyle{Wave}
+% \usetitlestyle{verticalShading}
+
+
+%\usepackage{fontspec}
+%\setmainfont{FreeSerif}
+%\setsansfont{FreeSans}
+
+\usepackage [sfdefault]{cabin}
+\usepackage[T1]{fontenc}
+\usepackage{natbib}
+
+\author{Eric Rexstad, David L. Miller, Laura Marshall and Len Thomas}
+\title{\parbox{0.6\linewidth}{\centering Migrating distance sampling projects from Distance for Windows to the Distance R package}}
+\institute{Centre for Research into Ecological and Environmental Modelling University of St Andrews}
+
+
+% borrowed from https://tex.stackexchange.com/questions/185166/tikzposter-4-logos-title-2-at-each-side/185278#185278
+
+%\makeatletter
+%\def\TP@titlegraphictotitledistance{-4cm}
+%\settitle{ \centering \vbox{
+%		\@titlegraphic \\ [\TP@titlegraphictotitledistance] 
+%		\centering
+%		\color{titlefgcolor} {\bfseries \Huge \sc \@title \par}
+%		\vspace*{1em}
+%		{\huge \@author \par} \vspace*{1em} {\LARGE \@institute}
+%}}
+%\makeatother
+
+%\setlength{\columnsep}{2cm}
+%
+%\title{\parbox{0.5\linewidth}{\centering My  really  really  really  really  really  really  really  really  long poster TITLE.}}
+%\author{Name}
+%\titlegraphic{
+%	\includegraphics[width=8cm, height=4cm]{ISEC_Logo.png}
+%	\hfill 
+%%	\includegraphics[width=9cm,height=8cm]{distancelogo.png}
+%	\\% \vspace{5pt} \\
+%	\includegraphics[width=3cm, height=6cm]{02-foundation-vertical-white.png}
+%	\hfill 
+%	\includegraphics[width=10.5cm,height=3cm]{CREEM_Logo_trans.png}
+%}
+
+
+%% Original, functional way to place single logo in middle
+%\titlegraphic{\includegraphics[width=7cm]{ISEC_Logo.png}}
+%% Uncomment to switch off tikzposter footer
+\tikzposterlatexaffectionproofoff
+
+\begin{document}
+\maketitle
+
+\begin{columns}
+
+\column{0.333}
+
+\block{Introduction}{
+The Distance software \citep{thomas_distance_2010} has been downloaded >40,000 times in its 20-year history.  Much of the underlying machinery is written in R.  For some users, there may be benefits to performing the analysis with the underlying R code, rather than working with the graphical user interface (GUI).
+	\begin{tikzfigure}[Traditional Distance for Windows interface (left) and distance sampling analysis in R (right).]
+%		\includegraphics[width=0.45\columnwidth]{D7-analysis-grab.PNG}
+		\includegraphics[width=0.95\linewidth]{merged-grabs.png}
+%		\includegraphics[width=0.45\columnwidth]{R-analysis-grab.PNG}
+	\end{tikzfigure}
+
+Challenges hindering the transition between analysis with the GUI and analyses in R are two-fold:
+\begin{itemize}
+	\item Legacy data reside in Distance (GUI) projects, unavailable for importing into R, and
+	\item Analyses that are easily described using the GUI may be difficult to specify, particularly if analyst is not proficient in R.
+\end{itemize}
+}
+
+\note[rotate=8, connection, width = 7cm, % targetoffsety=-2cm,
+% roundedcorners=15, targetoffsetx=2cm
+]{How to make this transition?}
+
+\block{How to bridge between the two?}{
+
+\begin{tikzfigure}[Database structure of a Distance project.]
+	\includegraphics[width=0.3\linewidth]{dst-file-structure.PNG}
+\end{tikzfigure}
+
+Distance project \textbf{\texttt{(.dst)}} file contains:
+
+\begin{enumerate}
+\item Data
+\item model definitions
+\item analysis results
+\end{enumerate}
+
+within an Access database.
+
+\begin{itemize}
+	\item Trick is to extract contents of (2) and translate into R code
+	\item Target the results of previous step to contents of (1) the data
+	\item Perhaps contrast results of R analysis with results stored in the Access database
+\end{itemize}
+
+
+}
+
+\column{0.3333}
+\block{Applications--Legacy projects}{
+\begin{itemize}
+\item We try to do this. what?
+\item we try to do that.
+\end{itemize}
+}
+
+\block{Learning structure of R interface}{%
+\begin{tikzfigure}[The organisation for which we work]
+\includegraphics[width=0.35\linewidth]{CREEM_Logo.jpg}
+\end{tikzfigure}
+}
+
+\column{0.3333}
+\block{Comparative analysis of difficult data}{
+\begin{itemize}
+\item We try to do this. what?
+\item we try to do that.
+\end{itemize}
+}
+
+\block{Caveats}{
+	\texttt{readdst} is not able to translate all GUI analyses into R code.  Current limitations are inability to translate
+	\begin{itemize}
+		\item analyses using the \texttt{dsm}, \texttt{mads} and \texttt{Dssim} engines,
+		\item analyses using post-stratification and
+		\item bootstraps for variance estimation.
+	\end{itemize}
+}
+
+\block{Request for additional datasets}{
+\begin{itemize}
+\item We try to do this. what?
+\item we try to do that.
+\item We try to do this. what?
+\item we try to do that.
+\item We try to do this. what?
+\item we try to do that.
+\end{itemize}
+}
+
+\block{Additional information}{
+
+\innerblock{Literature}{
+\nocite{*} % Insert publications even if they are not cited in the poster
+\small{\bibliographystyle{humannat}
+	\bibliography{isecposter}\vspace{0.75in}}
+}
+\item QR codes to package/website/bioRxiv
+
+}
+
+\end{columns}
+
+
+\end{document}
