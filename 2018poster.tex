@@ -29,6 +29,7 @@
 %\setmainfont{FreeSerif}
 %\setsansfont{FreeSans}
 \usetikzlibrary{positioning}
+\usetikzlibrary{trees}
 \usepackage [sfdefault]{cabin}
 \usepackage[T1]{fontenc}
 \usepackage{natbib}
@@ -216,12 +217,117 @@ Mining information from tables within the database, via either \texttt{RODBC} (W
 \end{tikzfigure}
 }
 
+
+%\begin{subcolumns} 
+%	\subcolumn{.5}  
+
+\block{}{
+	
+%\usetikzlibrary{arrows,shapes,positioning,shadows,trees}
+%
+%\tikzset{
+%	font={\fontsize{8pt}{8}\selectfont},		
+%	basic/.style  = {draw, text width=2cm, drop shadow, rectangle},
+%	root/.style   = {basic, rounded corners=2pt, thin, align=center,
+%		fill=green!30},
+%	level 2/.style = {basic, rounded corners=6pt, thin,align=center, fill=green!60,
+%		text width=8em},
+%	level 3/.style = {basic, thin, align=left, fill=pink!60, text width=6.5em}
+%	level 4/.style = {basic, thin, align=left, fill=blue!60, text width=6.5em}
+%}
+%
+%\begin{tikzfigure}[Structure of object produced by \texttt{convert\_project()}.]
+%	\centering
+%\begin{tikzpicture}[
+%level 1/.style={sibling distance=40mm},
+%edge from parent/.style={->,draw},
+%>=latex]
+%
+%% root of the the initial tree, level 1
+%\node[root] {converted\_distance\_analyses object}
+%% The first level, as children of the initial tree
+%child {node[level 2] (c1) {Half-normal cosine adjustments}}
+%child {node[level 2] (c2) {Hazard rate Hermite adjustments}}
+%child {node[level 2] (c3) {Uniform cosine adjustments}};
+%
+%% The second level, relatively positioned nodes
+%\begin{scope}[every node/.style={level 3}]
+%\node [below of = c1, xshift=15pt] (c11) {call mrds::ddf(dsmodel=$\sim$cds(key="hn", formula=$\sim$1, adj.series="cos"),...};
+%\node [below of = c11] (c12) {filter=none};
+%\node [below of = c12] (c13) {status=1};
+%\node [below of = c13] (c14) {group size};
+%\end{scope}
+%child {node[level 4] (d1) {under here}}
+%
+%%\node [below of = c2, xshift=15pt] (c21) {Using a Matrix};
+%%\node [below of = c21] (c22) {Relatively};
+%%\node [below of = c22] (c23) {Absolutely};
+%%\node [below of = c23] (c24) {Using overlays};
+%%
+%%\node [below of = c3, xshift=15pt] (c31) {Default arrows};
+%%\node [below of = c31] (c32) {Arrow library};
+%%\node [below of = c32] (c33) {Resizing tips};
+%%\node [below of = c33] (c34) {Shortening};
+%%\node [below of = c34] (c35) {Bending};
+%%\end{scope}
+%
+%% lines from each level 1 node to every one of its "children"
+%\foreach \value in {1,2,3}
+%\draw[->] (c1.195) |- (c1\value.west);
+%
+%%\foreach \value in {1,...,4}
+%%\draw[->] (c2.195) |- (c2\value.west);
+%%
+%%\foreach \value in {1,...,5}
+%%\draw[->] (c3.195) |- (c3\value.west);
+%\end{tikzpicture}
+%\end{tikzfigure}
+
+
+
+% filesystem tree from http://texample.net/tikz/examples/feature/trees/
+
+\begin{tikzfigure}[Structure of object produced by \texttt{convert\_project()}.]
+	\centering
+\tikzstyle{every node}=[draw=black,thick,anchor=west]
+\tikzstyle{selected}=[draw=red,fill=red!30]
+\tikzstyle{optional}=[dashed,fill=gray!50]
+\begin{tikzpicture}[%
+grow via three points={one child at (0.5,-0.7) and
+	two children at (0.5,-0.7) and (0.5,-1.4)},
+edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
+\node {texmf}
+child { node {doc}}		
+child { node {fonts}}
+child { node {source}}
+child { node [selected] {tex}
+	child { node {generic}}
+	child { node [optional] {latex}}
+	child { node {plain}}
+}
+child [missing] {}				
+child [missing] {}				
+child [missing] {}				
+child { node {texdoc}};
+\end{tikzpicture}
+\end{tikzfigure}
+}
+
+%\subcolumn{.48} 
+%
+%\block{Workflow}
+%{
+%	A standard use of the package is to convert and dataset and set of analyses from a Distance GUI project and re-run the analyses in R.  This is done using the workflow at left, based around the use of the \texttt{convert\_project()} function in concert with \texttt{run\_analysis()}
+%} 
+%\end{subcolumns}
+
+
 \column{0.3333}
 \block{Comparative analysis of difficult data}{
-\begin{itemize}
-\item We try to do this. what?
-\item we try to do that.
-\end{itemize}
+	\begin{itemize}
+		\item We try to do this. what?
+		\item we try to do that.
+	\end{itemize}
 }
 
 \block{Caveats}{
@@ -232,56 +338,6 @@ Mining information from tables within the database, via either \texttt{RODBC} (W
 		\item bootstraps for variance estimation.
 	\end{itemize}
 }
-
-\begin{subcolumns} 
-	\subcolumn{.5}  
-
-\block{}{
-	
-\tikzset{
-	font={\fontsize{12pt}{12}\selectfont}}	
-% Define block styles
-\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
-text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
-\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
-text width=5em, text centered, rounded corners, minimum height=4em]
-\tikzstyle{line} = [draw, -latex']
-\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
-minimum height=2em]
-
-\begin{tikzfigure}[Workflow for converting and analysing Distance project.]
-	\centering
-	\begin{tikzpicture}[node distance = 4cm, auto]
-% Place nodes
-\node [block] (init) {initialize model};
-\node [cloud, left of=init, node distance=4cm] (expert) {expert};
-\node [cloud, right of=init, node distance=4cm] (system) {system};
-\node [block, below of=init] (identify) {identify candidate models};
-\node [block, below of=identify] (evaluate) {evaluate candidate models};
-\node [block, left of=evaluate, node distance=4cm] (update) {update model};
-\node [decision, below of=evaluate, node distance=4cm] (decide) {is best candidate better?};
-\node [block, below of=decide, node distance=4cm] (stop) {stop};
-% Draw edges
-\path [line] (init) -- (identify);
-\path [line] (identify) -- (evaluate);
-\path [line] (evaluate) -- (decide);
-\path [line] (decide) -| node [near start] {yes} (update);
-\path [line] (update) |- (identify);
-\path [line] (decide) -- node {no}(stop);
-\path [line,dashed] (expert) -- (init);
-\path [line,dashed] (system) -- (init);
-\path [line,dashed] (system) |- (evaluate);
-\end{tikzpicture}
-\end{tikzfigure}
-}
-
-\subcolumn{.48} 
-
-\block{Workflow}
-{
-	A standard use of the package is to convert and dataset and set of analyses from a Distance GUI project and re-run the analyses in R.  This is done using the workflow at left, based around the use of the \texttt{convert\_project()} function in concert with \texttt{run\_analysis()}
-} 
-\end{subcolumns}
 
 \block{Additional information}{
 
