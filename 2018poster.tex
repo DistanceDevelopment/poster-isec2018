@@ -394,18 +394,25 @@ Mining information from tables within the database, via either \texttt{RODBC} (W
 	A user familiar with performing distance sampling analyses in the Distance GUI can use \texttt{converted\_distance\_analysis} objects to learn how to perform corresponding analyses using \texttt{mrds()}.  Alternatively, the imported data can be analysed using the Distance \citep{Miller2018} package.  Examples of both approaches provided below
 %%%  fix to code inside block error -- https://tex.stackexchange.com/questions/228675/how-can-i-put-a-code-listing-in-a-tikzposter-block
 	
-	\lstset{language=R, backgroundcolor=\color{blue!10}, keywordstyle=\color{blue}, stringstyle=\color{mymauve}, basicstyle=\footnotesize}
+	\lstset{language=R, backgroundcolor=\color{white}, keywordstyle=\color{blue}, stringstyle=\color{mymauve}, basicstyle=\footnotesize}
     \lstinputlisting[fontadjust]{convert-stratify.r}
 }
 
 \end{subcolumns}
 
 \column{0.3333}
+
+
+
 \block{Comparative analysis of difficult data}{
-	\begin{itemize}
-		\item We try to do this. what?
-		\item we try to do that.
-	\end{itemize}
+	
+	The \texttt{test\_stats()} function in \texttt{readdst} performs the analysis residing in the call element of the \texttt{converted\_distance\_analysis}, producing estimates of parameters of distance sampling analyses (\emph{e.g.} AIC scores, $\hat{P}_a$, $\hat{D}$, $\hat{D}$ and associated measures of precision).  These results are contrasted with estimates of the same parameters stored in the Access data base, as computed by the Distance GUI.
+	
+	The resulting comparison is produced in tabular form with the difference between estimates presented as proportions.  Those comparative estimates within a specified tolerance are highlighted.
+	\lstset{language=R, backgroundcolor=\color{white}, keywordstyle=\color{blue}, stringstyle=\color{mymauve}, basicstyle=\normalsize}
+	\lstinputlisting[fontadjust]{stat-table.txt}
+	
+	This can be used to investigate situations in which the FORTRAN optimisation engine in the Distance GUI performs differently from the optimiser in \texttt{mrds()}.
 }
 
 \block{Caveats}{
