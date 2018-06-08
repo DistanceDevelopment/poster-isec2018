@@ -29,7 +29,8 @@
 %\setmainfont{FreeSerif}
 %\setsansfont{FreeSans}
 \usetikzlibrary{positioning}
-\usetikzlibrary{trees}
+%\usetikzlibrary{trees}
+\usepackage[edges]{forest}
 \usepackage [sfdefault]{cabin}
 \usepackage[T1]{fontenc}
 \usepackage{natbib}
@@ -217,11 +218,6 @@ Mining information from tables within the database, via either \texttt{RODBC} (W
 \end{tikzfigure}
 }
 
-
-%\begin{subcolumns} 
-%	\subcolumn{.5}  
-
-\block{}{
 	
 %\usetikzlibrary{arrows,shapes,positioning,shadows,trees}
 %
@@ -287,39 +283,112 @@ Mining information from tables within the database, via either \texttt{RODBC} (W
 
 % filesystem tree from http://texample.net/tikz/examples/feature/trees/
 
+%\begin{tikzfigure}[Structure of object produced by \texttt{convert\_project()}.]
+%	\centering
+%\tikzset{
+%	font={\fontsize{8pt}{8}\selectfont}}	
+%\tikzstyle{every node}=[draw=black,thick,anchor=west]
+%\tikzstyle{selected}=[draw=red,fill=red!30]
+%\tikzstyle{optional}=[dashed,fill=gray!50]
+%\begin{tikzpicture}[%
+%grow via three points={one child at (0.5,-0.7) and
+%	two children at (0.5,-0.7) and (0.5,-1.4)},
+%edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
+%\node {analysis\_object}
+%child { node {call}}		
+%child { node {aic.select}}
+%child { node {status}}
+%child { node [selected] {env}
+%	child { node {data}}
+%	child { node {obs.table}}
+%	child { node {region.table}}
+%	child { node {sample.table}}
+%	child { node {units}}
+%}
+%child { node {filter}}
+%child { node {group size}}
+%	child { node {Bias}}
+%	child { node {by}}
+%child { node {detection\_by}}
+%child { node {gof\_intervals}}
+%child { node {estimation}}
+%	child { node {by}}
+%	child { node {Design}}
+%	child { node {Weight}}
+%child { node {ID}}
+%child { node {engine}}
+%child { node {project}}
+%child { node {project\_file}};
+%\end{tikzpicture}
+%\end{tikzfigure}
+
+
+\begin{subcolumns} 
+	\subcolumn{.25}  
+	
+\block{}
+{
 \begin{tikzfigure}[Structure of object produced by \texttt{convert\_project()}.]
-	\centering
-\tikzstyle{every node}=[draw=black,thick,anchor=west]
-\tikzstyle{selected}=[draw=red,fill=red!30]
-\tikzstyle{optional}=[dashed,fill=gray!50]
-\begin{tikzpicture}[%
-grow via three points={one child at (0.5,-0.7) and
-	two children at (0.5,-0.7) and (0.5,-1.4)},
-edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
-\node {texmf}
-child { node {doc}}		
-child { node {fonts}}
-child { node {source}}
-child { node [selected] {tex}
-	child { node {generic}}
-	child { node [optional] {latex}}
-	child { node {plain}}
-}
-child [missing] {}				
-child [missing] {}				
-child [missing] {}				
-child { node {texdoc}};
-\end{tikzpicture}
+	\label{fig:object}
+\begin{forest}
+	for tree={%
+		font=\footnotesize,
+		folder,
+		grow'=0,
+		fit=tight,
+	}
+	[analysis\_object
+	[call
+	]
+	[aic.select
+	]
+	[status
+	]
+	[env%,  label=right:where data reside
+	[data]
+	[obs.table]
+	[region.table]
+	[sample.table]
+	[units]
+	]
+	[filter]
+	[group\_size
+%	[Bias]
+%	[by]
+	]
+	[detection\_by]
+	[gof\_intervals]
+	[estimation
+%	[by]
+%	[Design]
+%	[Weight]
+	]
+	[ID]
+	[engine]
+	[project]
+	[project\_file]
+	]
+\end{forest}
 \end{tikzfigure}
 }
 
-%\subcolumn{.48} 
-%
-%\block{Workflow}
-%{
+\subcolumn{.75} 
+
+\block{Object produced by \texttt{convert\_project()}}
+{
+	
+	Figure \ref{fig:object} (left) shows the structure of an object of type \texttt{converted\_distance\_analysis}.  There are as many of these produced by \texttt{convert\_project()} as there were analyses in the Distance project.
+	
+	The list contains all the salient information of a Distance analysis extracted from the Access database.  We point out several of the list elements critical to subsequent processing of the now-extracted data.
+	\begin{description}
+		\item [call] R code call to the function \texttt{mrds()} to duplicate the analyses done in the Distance GUI.
+		\item [env] An \textit{environment} consisting of a set of data frames.  These data frames include the original data extracted from the Distance project, along with the observation, sample and region tables describing the hierarchial nature of the data base.
+	\end{description}
+	
+	The \texttt{converted\_distance\_analysis} list can be passed as an argument to \texttt{run\_analysis()}.
 %	A standard use of the package is to convert and dataset and set of analyses from a Distance GUI project and re-run the analyses in R.  This is done using the workflow at left, based around the use of the \texttt{convert\_project()} function in concert with \texttt{run\_analysis()}
-%} 
-%\end{subcolumns}
+} 
+\end{subcolumns}
 
 
 \column{0.3333}
