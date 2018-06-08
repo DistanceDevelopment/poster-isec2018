@@ -29,12 +29,15 @@
 %\setmainfont{FreeSerif}
 %\setsansfont{FreeSans}
 \usetikzlibrary{positioning}
+\usepackage{listings}
+\usepackage{color}
 %\usetikzlibrary{trees}
 \usepackage[edges]{forest}
 \usepackage [sfdefault]{cabin}
 \usepackage[T1]{fontenc}
 \usepackage{natbib}
 \usepackage{wrapfig}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
 
 \author{Eric Rexstad, David L. Miller, Laura Marshall and Len Thomas}
 \title{\parbox{0.6\linewidth}{\centering Migrating distance sampling projects from Distance for Windows to the Distance R package}}
@@ -205,17 +208,9 @@ Mining information from tables within the database, via either \texttt{RODBC} (W
 }
 
 \column{0.3333}
-\block{Applications--Legacy projects}{
-\begin{itemize}
-\item We try to do this. what?
-\item we try to do that.
-\end{itemize}
-}
-
-\block{Learning structure of R interface}{%
-\begin{tikzfigure}[The organisation for which we work]
-\includegraphics[width=0.35\linewidth]{CREEM_Logo.jpg}
-\end{tikzfigure}
+\block{Applications--Legacy projects}
+{
+	Workhorse function in \texttt{readdst} package is \texttt{convert\_projects()}.  Its single argument is simply the complete location path to an existing Distance GUI project (created by either Distance 6 or 7).  \texttt{convert\_projects()} interrogates the Access database and translates the contents of data base tables into an R object of class \texttt{converted\_distance\_analyses}, a list of lists of class \texttt{converted\_distance\_analysis}.  Fig. \ref{fig:object} gives an outline of the content of this list.
 }
 
 	
@@ -328,6 +323,8 @@ Mining information from tables within the database, via either \texttt{RODBC} (W
 	
 \block{}
 {
+	
+% https://tex.stackexchange.com/questions/23647/drawing-a-directory-listing-a-la-the-tree-command-in-tikz	
 \begin{tikzfigure}[Structure of object produced by \texttt{convert\_project()}.]
 	\label{fig:object}
 \begin{forest}
@@ -384,12 +381,24 @@ Mining information from tables within the database, via either \texttt{RODBC} (W
 		\item [call] R code call to the function \texttt{mrds()} to duplicate the analyses done in the Distance GUI.
 		\item [env] An \textit{environment} consisting of a set of data frames.  These data frames include the original data extracted from the Distance project, along with the observation, sample and region tables describing the hierarchial nature of the data base.
 	\end{description}
+
+	The nature of the analysis conducted by the Distance GUI, translated into a call to \texttt{mrds()} \citep{Laake2018}, as well as the data used in the analysis is contained within this object and available for further analysis within the R environment.
 	
-	The \texttt{converted\_distance\_analysis} list can be passed as an argument to \texttt{run\_analysis()}.
+	The \texttt{converted\_distance\_analysis} list can be passed as an argument to \texttt{run\_analysis()}.  This function will perform an \texttt{mrds()} analysis \emph{behind-the-scenes} , without the user seeing how it was performed.
 %	A standard use of the package is to convert and dataset and set of analyses from a Distance GUI project and re-run the analyses in R.  This is done using the workflow at left, based around the use of the \texttt{convert\_project()} function in concert with \texttt{run\_analysis()}
 } 
-\end{subcolumns}
 
+
+\block{Learning structure of R interface}
+{
+	A user familiar with performing distance sampling analyses in the Distance GUI can use \texttt{converted\_distance\_analysis} objects to learn how to perform corresponding analyses using \texttt{mrds()}.  Alternatively, the imported data can be analysed using the Distance \citep{Miller2018} package.  Examples of both approaches provided below
+%%%  fix to code inside block error -- https://tex.stackexchange.com/questions/228675/how-can-i-put-a-code-listing-in-a-tikzposter-block
+	
+	\lstset{language=R, backgroundcolor=\color{blue!10}, keywordstyle=\color{blue}, stringstyle=\color{mymauve}, basicstyle=\footnotesize}
+    \lstinputlisting[fontadjust]{convert-stratify.r}
+}
+
+\end{subcolumns}
 
 \column{0.3333}
 \block{Comparative analysis of difficult data}{
