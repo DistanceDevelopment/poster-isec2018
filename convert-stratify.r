@@ -1,11 +1,15 @@
-library(readdst)
-home.dir <- path.expand("~")
-stratify.proj.directory <- system.file("Stratify", package="readdst")
-stratify.proj.name <- paste0(stratify.proj.directory, "/Vignette-stratify")
-stratify.proj <- convert_project(stratify.proj.name)
-#  post-conversion, re-run analysis with 'run_analysis'
-strat.mrds.a1 <- run_analysis(stratify.proj$'Half-normal cosine no stratification exact')
-#  perform same analysis manually, using ds()
-library(Distance)
-strat.dist.a1 <- ds(key="hn", formula=~1, adj="cos", order=2,
-                      data=stratify.proj$'Half-normal cosine no stratification exact'$env$data)
+> library(readdst)
+> stratify.proj
+  ID                                       Name            Status
+1 13 Half-normal cosine no stratification exact            Ran OK
+2 16            Half-normal cosine pooled detfn            Ran OK
+3 15    Half-normal cosine strat-specific detfn Ran with warnings
+> stratify.proj[[1]]
+Model name  : Half-normal cosine no stratification exact
+ID          : 13
+Data filter :
+mrds call   : mrds::ddf(dsmodel=~cds(key="hn", formula=~1,
+              adj.series="cos", adj.order=NULL),
+              meta.data=list(width=NA,left=0),
+              control=list(mono=TRUE, mono.strict=TRUE),
+              method="ds", data=data)
