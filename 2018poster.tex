@@ -176,10 +176,9 @@ Challenges hindering the transition between analysis with the GUI and analyses i
 % roundedcorners=15, targetoffsetx=2cm
 ]{How to make this transition?}
 
-\block{How to bridge between the two?}{
+\block{Getting data out of Distance}{
 
-Distance GUI projects contain essential information necessary to conduct an analysis.  The fundamental purpose of the \texttt{readdst} package is to access this information and place it into R objects for further scrutiny.
- 
+%Distance GUI projects contain essential information necessary to conduct an analysis.  The fundamental purpose of the \texttt{readdst} package is to access this information and place it into R objects for further scrutiny.
 
 
 \begin{wrapfigure}[12]{l}{0.6\linewidth}
@@ -189,28 +188,28 @@ Distance GUI projects contain essential information necessary to conduct an anal
 	%\caption{Database structure of a Distance project.}
 \end{wrapfigure}
 
-The elements of a distance sampling analysis are contained inside Distance project files in the form of an Access database.
-
-\begin{enumerate}
-	\item Data
-	\item model definitions
-	\item analysis results
-\end{enumerate}
-
-Mining information from tables within the database, via either \texttt{RODBC} (Windows) or \texttt{mdb-tools} (Macs).  Then it is a matter of performing the following three steps.
+Distance sampling analysis are defined in Distance project files (an Access database).
 
 \begin{itemize}
-	\item Trick is to extract contents of (2) and translate into R code
-	\item Target the results of previous step to contents of (1) the data
-	\item Perhaps contrast results of R analysis with results stored in the Access database
+	\item Data
+	\item Model definitions
+	\item Analysis results
 \end{itemize}
+
+\texttt{readdst} uses \texttt{RODBC} (Windows) or \texttt{mdb-tools} (Mac) to mine the above information out of the database, then:
+
+\begin{enumerate}
+	\item Translate model definitions into R code
+	\item Save data into an R \texttt{environment}
+	\item Extract results from the database for completed analyses
+\end{enumerate}
 
 }
 
 \column{0.3333}
 \block{Converting Distance projects to R}
 {
-	Workhorse function in \texttt{readdst} package is \texttt{convert\_projects()}.  Its single argument is simply the path to an existing Distance GUI project (created by Distance 6 or 7).  \texttt{convert\_projects()} interrogates the Access database and translates the contents of data base tables into an R object of class \texttt{converted\_distance\_analyses}, a list of lists of class \texttt{converted\_distance\_analysis}.
+	Workhorse function in \texttt{readdst} package is \texttt{convert\_projects()}.  Its single argument is simply the path to an existing Distance GUI project (created by Distance 6 or 7).  \texttt{convert\_projects()} interrogates the Access database and translates the contents of database tables into an R object of class \texttt{converted\_distance\_analyses}, a list of lists of class \texttt{converted\_distance\_analysis}.
 }
 
 	
