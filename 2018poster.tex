@@ -210,7 +210,7 @@ Mining information from tables within the database, via either \texttt{RODBC} (W
 \column{0.3333}
 \block{Applications--Legacy projects}
 {
-	Workhorse function in \texttt{readdst} package is \texttt{convert\_projects()}.  Its single argument is simply the complete location path to an existing Distance GUI project (created by either Distance 6 or 7).  \texttt{convert\_projects()} interrogates the Access database and translates the contents of data base tables into an R object of class \texttt{converted\_distance\_analyses}, a list of lists of class \texttt{converted\_distance\_analysis}.  Fig. \ref{fig:object} gives an outline of the content of this list.
+	Workhorse function in \texttt{readdst} package is \texttt{convert\_projects()}.  Its single argument is simply the complete location path to an existing Distance GUI project (created by either Distance 6 or 7).  \texttt{convert\_projects()} interrogates the Access database and translates the contents of data base tables into an R object of class \texttt{converted\_distance\_analyses}, a list of lists of class \texttt{converted\_distance\_analysis}.
 }
 
 	
@@ -318,65 +318,63 @@ Mining information from tables within the database, via either \texttt{RODBC} (W
 %\end{tikzfigure}
 
 
-\begin{subcolumns} 
-	\subcolumn{.25}  
-	
-\block{}
-{
-	
-% https://tex.stackexchange.com/questions/23647/drawing-a-directory-listing-a-la-the-tree-command-in-tikz	
-\begin{tikzfigure}[Structure of object produced by \texttt{convert\_project()}.]
-	\label{fig:object}
-\begin{forest}
-	for tree={%
-		font=\footnotesize,
-		folder,
-		grow'=0,
-		fit=tight,
-	}
-	[analysis\_object
-	[call
-	]
-	[aic.select
-	]
-	[status
-	]
-	[env%,  label=right:where data reside
-	[data]
-	[obs.table]
-	[region.table]
-	[sample.table]
-	[units]
-	]
-	[filter]
-	[group\_size
-%	[Bias]
-%	[by]
-	]
-	[detection\_by]
-	[gof\_intervals]
-	[estimation
-%	[by]
-%	[Design]
-%	[Weight]
-	]
-	[ID]
-	[engine]
-	[project]
-	[project\_file]
-	]
-\end{forest}
-\end{tikzfigure}
-}
+%\begin{subcolumns} 
+%	\subcolumn{.25}  
+%	
+%\block{}
+%{
+%	
+%% https://tex.stackexchange.com/questions/23647/drawing-a-directory-listing-a-la-the-tree-command-in-tikz	
+%\begin{tikzfigure}[Structure of object produced by \texttt{convert\_project()}.]
+%	\label{fig:object}
+%\begin{forest}
+%	for tree={%
+%		font=\footnotesize,
+%		folder,
+%		grow'=0,
+%		fit=tight,
+%	}
+%	[analysis\_object
+%	[call
+%	]
+%	[aic.select
+%	]
+%	[status
+%	]
+%	[env%,  label=right:where data reside
+%	[data]
+%	[obs.table]
+%	[region.table]
+%	[sample.table]
+%	[units]
+%	]
+%	[filter]
+%	[group\_size
+%%	[Bias]
+%%	[by]
+%	]
+%	[detection\_by]
+%	[gof\_intervals]
+%	[estimation
+%%	[by]
+%%	[Design]
+%%	[Weight]
+%	]
+%	[ID]
+%	[engine]
+%	[project]
+%	[project\_file]
+%	]
+%\end{forest}
+%\end{tikzfigure}
+%}
 
-\subcolumn{.75} 
+%\subcolumn{1} 
 
 \block{Object produced by \texttt{convert\_project()}}
 {
 	
-	Figure \ref{fig:object} (left) shows the structure of an object of type \texttt{converted\_distance\_analysis}.  There are as many of these produced by \texttt{convert\_project()} as there were analyses in the Distance project.
-	
-	The list contains all the salient information of a Distance analysis extracted from the Access database.  We point out several of the list elements critical to subsequent processing of the now-extracted data.
+	The list returned by \texttt{convert\_project()}, for a given entry (analysis) contains all the salient information of a Distance analysis extracted from the Access database.  We point out several of the list elements critical to subsequent processing of the now-extracted data.
 	\begin{description}
 		\item [call] R code call to the function \texttt{mrds()} to duplicate the analyses done in the Distance GUI.
 		\item [env] An \textit{environment} consisting of a set of data frames.  These data frames include the original data extracted from the Distance project, along with the observation, sample and region tables describing the hierarchial nature of the data base.
@@ -398,7 +396,7 @@ Mining information from tables within the database, via either \texttt{RODBC} (W
     \lstinputlisting[fontadjust]{convert-stratify.r}
 }
 
-\end{subcolumns}
+%\end{subcolumns}
 
 \column{0.3333}
 
