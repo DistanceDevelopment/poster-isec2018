@@ -376,20 +376,20 @@ Mining information from tables within the database, via either \texttt{RODBC} (W
 	
 	The list returned by \texttt{convert\_project()}, for a given entry (analysis) contains all the salient information of a Distance analysis extracted from the Access database.  We point out several of the list elements critical to subsequent processing of the now-extracted data.
 	\begin{description}
-		\item [call] R code call to the function \texttt{mrds()} to duplicate the analyses done in the Distance GUI.
+		\item [call] R code call to the function \texttt{ddf()} in package \texttt{mrds} to duplicate the analyses done in the Distance GUI.
 		\item [env] An \textit{environment} consisting of a set of data frames.  These data frames include the original data extracted from the Distance project, along with the observation, sample and region tables describing the hierarchial nature of the data base.
 	\end{description}
 
-	The nature of the analysis conducted by the Distance GUI, translated into a call to \texttt{mrds()} \citep{Laake2018}, as well as the data used in the analysis is contained within this object and available for further analysis within the R environment.
+	The nature of the analysis conducted by the Distance GUI, translated into a call to \texttt{ddf()} in package \texttt{mrds}, as well as the data used in the analysis is contained within this object and available for further analysis within the R environment.
 	
-	The \texttt{converted\_distance\_analysis} list can be passed as an argument to \texttt{run\_analysis()}.  This function will perform an \texttt{mrds()} analysis \emph{behind-the-scenes} , without the user seeing how it was performed.
+	The \texttt{converted\_distance\_analysis} list can be passed as an argument to \texttt{run\_analysis()}.  This function will perform an \texttt{mrds} analysis \emph{behind-the-scenes} , without the user seeing how it was performed.
 %	A standard use of the package is to convert and dataset and set of analyses from a Distance GUI project and re-run the analyses in R.  This is done using the workflow at left, based around the use of the \texttt{convert\_project()} function in concert with \texttt{run\_analysis()}
 } 
 
 
 \block{Learning structure of R interface}
 {
-	A user familiar with performing distance sampling analyses in the Distance GUI can use \texttt{converted\_distance\_analysis} objects to learn how to perform corresponding analyses using \texttt{mrds()}.  Alternatively, the imported data can be analysed using the Distance \citep{Miller2018} package.  Examples of both approaches provided below
+	A user familiar with performing distance sampling analyses in the Distance GUI can use \texttt{converted\_distance\_analysis} objects to learn how to perform corresponding analyses using the \texttt{mrds} R package.  Alternatively, the imported data can be analysed using the \texttt{Distance} \citep{Miller2018} package.  Examples of both approaches provided below
 %%%  fix to code inside block error -- https://tex.stackexchange.com/questions/228675/how-can-i-put-a-code-listing-in-a-tikzposter-block
 	
 	\lstset{language=R, backgroundcolor=\color{white}, keywordstyle=\color{blue}, stringstyle=\color{mymauve}, basicstyle=\footnotesize}
