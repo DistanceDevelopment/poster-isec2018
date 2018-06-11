@@ -159,7 +159,7 @@
 
 \block{Introduction}{
 The Distance software \citep{thomas_distance_2010} has been downloaded >40,000 times in its 20-year history.  Much of the underlying machinery is written in R.  For some users, there may be benefits to performing the analysis with the underlying R code, rather than working with the graphical user interface (GUI).
-	\begin{tikzfigure}[Traditional Distance for Windows interface (left) and distance sampling analysis in R (right).]
+	\begin{tikzfigure}%[Traditional Distance for Windows interface (left) and distance sampling analysis in R (right).]
 %		\includegraphics[width=0.45\columnwidth]{D7-analysis-grab.PNG}
 		\includegraphics[width=0.95\linewidth]{merged-grabs.png}
 %		\includegraphics[width=0.45\columnwidth]{R-analysis-grab.PNG}
@@ -176,41 +176,40 @@ Challenges hindering the transition between analysis with the GUI and analyses i
 % roundedcorners=15, targetoffsetx=2cm
 ]{How to make this transition?}
 
-\block{How to bridge between the two?}{
+\block{Getting data out of Distance}{
 
-Distance GUI projects contain essential information necessary to conduct an analysis.  The fundamental purpose of the \texttt{readdst} package is to access this information and place it into R objects for further scrutiny.
- 
+%Distance GUI projects contain essential information necessary to conduct an analysis.  The fundamental purpose of the \texttt{readdst} package is to access this information and place it into R objects for further scrutiny.
 
 
 \begin{wrapfigure}[12]{l}{0.6\linewidth}
 	\begin{tikzfigure}
 		\includegraphics[width=.85\linewidth]{dst-file-structure.PNG}
 	\end{tikzfigure}
-	\caption{Database structure of a Distance project.}
+	%\caption{Database structure of a Distance project.}
 \end{wrapfigure}
 
-The elements of a distance sampling analysis are contained inside Distance project files in the form of an Access database.
-
-\begin{enumerate}
-	\item Data
-	\item model definitions
-	\item analysis results
-\end{enumerate}
-
-Mining information from tables within the database, via either \texttt{RODBC} (Windows) or \texttt{mdb-tools} (Macs).  Then it is a matter of performing the following three steps.
+Distance sampling analysis are defined in Distance project files (an Access database).
 
 \begin{itemize}
-	\item Trick is to extract contents of (2) and translate into R code
-	\item Target the results of previous step to contents of (1) the data
-	\item Perhaps contrast results of R analysis with results stored in the Access database
+	\item Data
+	\item Model definitions
+	\item Analysis results
 \end{itemize}
+
+\texttt{readdst} uses \texttt{RODBC} (Windows) or \texttt{mdb-tools} (Mac) to mine the above information out of the database, then:
+
+\begin{enumerate}
+	\item Translate model definitions into R code
+	\item Save data into an R \texttt{environment}
+	\item Extract results from the database for completed analyses
+\end{enumerate}
 
 }
 
 \column{0.3333}
-\block{Applications--Legacy projects}
+\block{Converting Distance projects to R}
 {
-	Workhorse function in \texttt{readdst} package is \texttt{convert\_projects()}.  Its single argument is simply the complete location path to an existing Distance GUI project (created by either Distance 6 or 7).  \texttt{convert\_projects()} interrogates the Access database and translates the contents of data base tables into an R object of class \texttt{converted\_distance\_analyses}, a list of lists of class \texttt{converted\_distance\_analysis}.  Fig. \ref{fig:object} gives an outline of the content of this list.
+	Workhorse function in \texttt{readdst} package is \texttt{convert\_projects()}.  Its single argument is simply the path to an existing Distance GUI project (created by Distance 6 or 7).  \texttt{convert\_projects()} interrogates the Access database and translates the contents of database tables into an R object of class \texttt{converted\_distance\_analyses}, a list of lists of class \texttt{converted\_distance\_analysis}.
 }
 
 	
@@ -318,87 +317,85 @@ Mining information from tables within the database, via either \texttt{RODBC} (W
 %\end{tikzfigure}
 
 
-\begin{subcolumns} 
-	\subcolumn{.25}  
-	
-\block{}
-{
-	
-% https://tex.stackexchange.com/questions/23647/drawing-a-directory-listing-a-la-the-tree-command-in-tikz	
-\begin{tikzfigure}[Structure of object produced by \texttt{convert\_project()}.]
-	\label{fig:object}
-\begin{forest}
-	for tree={%
-		font=\footnotesize,
-		folder,
-		grow'=0,
-		fit=tight,
-	}
-	[analysis\_object
-	[call
-	]
-	[aic.select
-	]
-	[status
-	]
-	[env%,  label=right:where data reside
-	[data]
-	[obs.table]
-	[region.table]
-	[sample.table]
-	[units]
-	]
-	[filter]
-	[group\_size
-%	[Bias]
-%	[by]
-	]
-	[detection\_by]
-	[gof\_intervals]
-	[estimation
-%	[by]
-%	[Design]
-%	[Weight]
-	]
-	[ID]
-	[engine]
-	[project]
-	[project\_file]
-	]
-\end{forest}
-\end{tikzfigure}
-}
+%\begin{subcolumns} 
+%	\subcolumn{.25}  
+%	
+%\block{}
+%{
+%	
+%% https://tex.stackexchange.com/questions/23647/drawing-a-directory-listing-a-la-the-tree-command-in-tikz	
+%\begin{tikzfigure}[Structure of object produced by \texttt{convert\_project()}.]
+%	\label{fig:object}
+%\begin{forest}
+%	for tree={%
+%		font=\footnotesize,
+%		folder,
+%		grow'=0,
+%		fit=tight,
+%	}
+%	[analysis\_object
+%	[call
+%	]
+%	[aic.select
+%	]
+%	[status
+%	]
+%	[env%,  label=right:where data reside
+%	[data]
+%	[obs.table]
+%	[region.table]
+%	[sample.table]
+%	[units]
+%	]
+%	[filter]
+%	[group\_size
+%%	[Bias]
+%%	[by]
+%	]
+%	[detection\_by]
+%	[gof\_intervals]
+%	[estimation
+%%	[by]
+%%	[Design]
+%%	[Weight]
+%	]
+%	[ID]
+%	[engine]
+%	[project]
+%	[project\_file]
+%	]
+%\end{forest}
+%\end{tikzfigure}
+%}
 
-\subcolumn{.75} 
+%\subcolumn{1} 
 
 \block{Object produced by \texttt{convert\_project()}}
 {
 	
-	Figure \ref{fig:object} (left) shows the structure of an object of type \texttt{converted\_distance\_analysis}.  There are as many of these produced by \texttt{convert\_project()} as there were analyses in the Distance project.
-	
-	The list contains all the salient information of a Distance analysis extracted from the Access database.  We point out several of the list elements critical to subsequent processing of the now-extracted data.
+	The list returned by \texttt{convert\_project()}, for a given entry (analysis) contains all the salient information of a Distance analysis extracted from the Access database.  We point out several of the list elements critical to subsequent processing of the now-extracted data.
 	\begin{description}
-		\item [call] R code call to the function \texttt{mrds()} to duplicate the analyses done in the Distance GUI.
+		\item [call] R code call to the function \texttt{ddf()} in package \texttt{mrds} to duplicate the analyses done in the Distance GUI.
 		\item [env] An \textit{environment} consisting of a set of data frames.  These data frames include the original data extracted from the Distance project, along with the observation, sample and region tables describing the hierarchial nature of the data base.
 	\end{description}
 
-	The nature of the analysis conducted by the Distance GUI, translated into a call to \texttt{mrds()} \citep{Laake2018}, as well as the data used in the analysis is contained within this object and available for further analysis within the R environment.
+	The nature of the analysis conducted by the Distance GUI, translated into a call to \texttt{ddf()} in package \texttt{mrds}, as well as the data used in the analysis is contained within this object and available for further analysis within the R environment.
 	
-	The \texttt{converted\_distance\_analysis} list can be passed as an argument to \texttt{run\_analysis()}.  This function will perform an \texttt{mrds()} analysis \emph{behind-the-scenes} , without the user seeing how it was performed.
+	The \texttt{converted\_distance\_analysis} list can be passed as an argument to \texttt{run\_analysis()}.  This function will perform an \texttt{mrds} analysis \emph{behind-the-scenes} , without the user seeing how it was performed.
 %	A standard use of the package is to convert and dataset and set of analyses from a Distance GUI project and re-run the analyses in R.  This is done using the workflow at left, based around the use of the \texttt{convert\_project()} function in concert with \texttt{run\_analysis()}
 } 
 
 
-\block{Learning structure of R interface}
+\block{Learning distance sampling in R}
 {
-	A user familiar with performing distance sampling analyses in the Distance GUI can use \texttt{converted\_distance\_analysis} objects to learn how to perform corresponding analyses using \texttt{mrds()}.  Alternatively, the imported data can be analysed using the Distance \citep{Miller2018} package.  Examples of both approaches provided below
+Distance GUI users can use \texttt{converted\_distance\_analysis} objects to learn how to perform corresponding analyses using the \texttt{mrds} R package:
 %%%  fix to code inside block error -- https://tex.stackexchange.com/questions/228675/how-can-i-put-a-code-listing-in-a-tikzposter-block
 	
-	\lstset{language=R, backgroundcolor=\color{white}, keywordstyle=\color{blue}, stringstyle=\color{mymauve}, basicstyle=\footnotesize}
+	\lstset{backgroundcolor=\color{white}, keywordstyle=\color{blue}, stringstyle=\color{mymauve}}
     \lstinputlisting[fontadjust]{convert-stratify.r}
 }
 
-\end{subcolumns}
+%\end{subcolumns}
 
 \column{0.3333}
 
@@ -409,7 +406,7 @@ Mining information from tables within the database, via either \texttt{RODBC} (W
 	The \texttt{test\_stats()} function in \texttt{readdst} performs the analysis residing in the call element of the \texttt{converted\_distance\_analysis}, producing estimates of parameters of distance sampling analyses (\emph{e.g.} AIC scores, $\hat{P}_a$, $\hat{D}$, $\hat{D}$ and associated measures of precision).  These results are contrasted with estimates of the same parameters stored in the Access data base, as computed by the Distance GUI.
 	
 	The resulting comparison is produced in tabular form with the difference between estimates presented as proportions.  Those comparative estimates within a specified tolerance are highlighted.
-	\lstset{language=R, backgroundcolor=\color{white}, keywordstyle=\color{blue}, stringstyle=\color{mymauve}, basicstyle=\normalsize}
+	\lstset{backgroundcolor=\color{white}, keywordstyle=\color{blue}, stringstyle=\color{mymauve}, basicstyle=\normalsize}
 	\lstinputlisting[fontadjust]{stat-table.txt}
 	
 	This can be used to investigate situations in which the FORTRAN optimisation engine in the Distance GUI performs differently from the optimiser in \texttt{mrds()}.
