@@ -1,4 +1,5 @@
 > library(readdst)
+> stratify.proj <- convert_project("C:/Distance Projects/myproject")
 > stratify.proj
   ID                                       Name            Status
 1 13 Half-normal cosine no stratification exact            Ran OK
