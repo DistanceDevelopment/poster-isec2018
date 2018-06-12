@@ -25,16 +25,11 @@
 % \usetitlestyle{verticalShading}
 
 
-%\usepackage{fontspec}
-%\setmainfont{FreeSerif}
-%\setsansfont{FreeSans}
 \usetikzlibrary{positioning}
 \usepackage[utf8]{inputenc}
 \usepackage{listingsutf8}
-\DeclareUnicodeCharacter{2713}{\ck}
 \usepackage{xcolor}
-%\usetikzlibrary{trees}
-\usepackage[edges]{forest}
+%\usepackage[edges]{forest}
 \usepackage [sfdefault]{cabin}
 \usepackage[T1]{fontenc}
 \usepackage{natbib}
@@ -65,7 +60,7 @@
 \insertlogoi[width=7cm]{ISEC_Logo_light_background_RGB.png}
 \insertlogoii[width=7cm]{CREEM_Logo_trans.png}
 \insertlogoiii[width=5.5cm]{02-foundation-vertical-white.png}
-\insertlogoiv[width=12cm]{distancelogo.png}
+\insertlogoiv[width=5cm]{websitelogo2.png}
 
 \renewcommand\maketitle[1][]{  % #1 keys
 	\normalsize
@@ -131,9 +126,7 @@
 \block{Introduction}{
 The Distance software \citep{thomas_distance_2010} has been downloaded >40,000 times in its 20-year history.   It consists of a Windows-based Graphical User Interface (GUI) that gives users ready access to survey design tools (written in Visual Basic) and analysis engines (written in FORTRAN and, more recently, R). For some users, there my be benifits to performing their analyses directly with the underlying R code, rather than working with the GUI.
 	\begin{tikzfigure}%[Traditional Distance for Windows interface (left) and distance sampling analysis in R (right).]
-%		\includegraphics[width=0.45\columnwidth]{D7-analysis-grab.PNG}
 		\includegraphics[width=0.95\linewidth]{merged-grabs.png}
-%		\includegraphics[width=0.45\columnwidth]{R-analysis-grab.PNG}
 	\end{tikzfigure}
 
 Challenges hindering the transition between analysis with the GUI and analyses in R are two-fold:
@@ -149,14 +142,10 @@ Challenges hindering the transition between analysis with the GUI and analyses i
 
 \block{Getting data out of Distance}{
 
-%Distance GUI projects contain essential information necessary to conduct an analysis.  The fundamental purpose of the \texttt{readdst} package is to access this information and place it into R objects for further scrutiny.
-
-
 \begin{wrapfigure}[10]{l}{0.6\linewidth}
 	\begin{tikzfigure}
 		\includegraphics[width=.85\linewidth]{dst-file-structure.PNG}
 	\end{tikzfigure}
-	%\caption{Database structure of a Distance project.}
 \end{wrapfigure}
 
 Distance sampling analysis are defined in Distance project files (an Access database).
@@ -241,38 +230,35 @@ Distance sampling analysis are defined in Distance project files (an Access data
 		\item [call] R code call to the function \texttt{ddf()} in package \texttt{mrds} to duplicate the analyses done in the Distance GUI.
 		\item [env] An \textit{environment} consisting of a set of data frames.  These data frames include the original data extracted from the Distance project, along with the observation, sample and region tables describing the hierarchial nature of the data base.
 	\end{description}
-
-%	The nature of the analysis conducted by the Distance GUI, translated into a call to \texttt{ddf()} in package \texttt{mrds}, as well as the data used in the analysis is contained within this object and available for further analysis within the R environment.
 	
 	The \texttt{converted\_distance\_analysis} list can be passed as an argument to \texttt{run\_analysis()}.  Given \texttt{object} has been created by a call to \texttt{convert\_project}, \texttt{run\_analysis()} will perform an \texttt{mrds} analysis by processing data in \texttt{object\$env} using \texttt{ddf()} syntax in \texttt{object\$call} to conduct a distance sampling analysis.
-%	A standard use of the package is to convert and dataset and set of analyses from a Distance GUI project and re-run the analyses in R.  This is done using the workflow at left, based around the use of the \texttt{convert\_project()} function in concert with \texttt{run\_analysis()}
 } 
 
 
 \block{Learning distance sampling in R}
 {
-Distance GUI users can use \texttt{converted\_distance\_analysis} objects to learn how to perform corresponding analyses using the \texttt{mrds} R package:
-%%%  fix to code inside block error -- https://tex.stackexchange.com/questions/228675/how-can-i-put-a-code-listing-in-a-tikzposter-block
+	Distance GUI users can use \texttt{converted\_distance\_analysis} objects to learn how to perform corresponding analyses using the \texttt{mrds} R package:
+	%%%  fix to code inside block error -- https://tex.stackexchange.com/questions/228675/how-can-i-put-a-code-listing-in-a-tikzposter-block
+		
+		\lstset{backgroundcolor=\color{white}, keywordstyle=\color{blue}, stringstyle=\color{mymauve},
+		        inputencoding=utf8, extendedchars=true}
+	    \lstinputlisting[fontadjust]{convert-stratify.r}
 	
-	\lstset{backgroundcolor=\color{white}, keywordstyle=\color{blue}, stringstyle=\color{mymauve},
-	        inputencoding=utf8, extendedchars=true}
-    \lstinputlisting[fontadjust]{convert-stratify.r}
-
-Note too that components from objects of type \texttt{converted\_distance\_analysis} can be analysed using the \texttt{ds()} function from the \texttt{Distance} package.
+	Note too that components from objects of type \texttt{converted\_distance\_analysis} can be analysed using the \texttt{ds()} function from the \texttt{Distance} package.
 }
 
 
 \column{0.3333}
 
-\block{Comparative analysis of difficult data}{
+\block{Comparative analysis of data sets}{
 	
 	The \texttt{test\_stats()} function in \texttt{readdst} performs the analysis residing in the call element of the \texttt{converted\_distance\_analysis}, producing estimates of parameters of distance sampling analyses (\emph{e.g.} AIC scores, $\hat{P}_a$, $\hat{D}$, $\hat{D}$ and associated measures of precision).  These results are contrasted with estimates of the same parameters stored in the Access data base, as computed by the Distance GUI.
 	
-	The resulting comparison is produced in tabular form with the difference between estimates presented as proportions.  Those comparative estimates within a specified tolerance are highlighted.
+	The resulting comparison is produced in tabular form with the difference between estimates presented as proportions.  Those comparative estimates within a specified tolerance are designated with \textbf{X}.
 	\lstset{backgroundcolor=\color{white}, keywordstyle=\color{blue}, stringstyle=\color{mymauve}, basicstyle=\normalsize}
 	\lstinputlisting[fontadjust]{stat-table.txt}
 	
-	This can be used to investigate situations in which the FORTRAN optimisation engine in the Distance GUI performs differently from the optimiser in \texttt{mrds()}.
+	This testing capability is part of our strategy to migrate software development from the existing Distance GUI to R packages.  We can check consistency of results between the Distance GUI and developing R code.
 }
 
 \block{Caveats}{
@@ -286,21 +272,20 @@ Note too that components from objects of type \texttt{converted\_distance\_analy
 
 \block{Additional information}{
 
-\coloredbox[bgcolor=lightgray, framecolor=black]{
-	\nocite{*} % Insert publications even if they are not cited in the poster
-	\small{\bibliographystyle{humannat}
-		\bibliography{isecposter}}
-}
-
-\begin{tikzfigure}
-	\includegraphics[width=.16\linewidth]{qrcode-readdst.png}
-	\includegraphics[width=.16\linewidth]{QRcap-readdst.png}
-	\includegraphics[width=.16\linewidth]{qrcode-bioRxiv.png}
-	\includegraphics[width=.16\linewidth]{QRcap-bioRxiv.png}
-	\includegraphics[width=.16\linewidth]{qrcode-thomas-1e5687.png}
-	\includegraphics[width=.16\linewidth]{QRcap-thomasetal.png}	
-\end{tikzfigure}
-
+	\coloredbox[bgcolor=lightgray, framecolor=black]{
+		\nocite{*} % Insert publications even if they are not cited in the poster
+		\small{\bibliographystyle{humannat}
+			\bibliography{isecposter}}
+	}
+	
+	\begin{tikzfigure}
+		\includegraphics[width=.16\linewidth]{qrcode-readdst.png}
+		\includegraphics[width=.16\linewidth]{QRcap-readdst.png}
+		\includegraphics[width=.16\linewidth]{qrcode-bioRxiv.png}
+		\includegraphics[width=.16\linewidth]{QRcap-bioRxiv.png}
+		\includegraphics[width=.16\linewidth]{qrcode-thomas-1e5687.png}
+		\includegraphics[width=.16\linewidth]{QRcap-thomasetal.png}	
+	\end{tikzfigure}
 }
 
 \end{columns}
