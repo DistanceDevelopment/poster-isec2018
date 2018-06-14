@@ -35,6 +35,7 @@
 \usepackage{natbib}
 \usepackage{wrapfig}
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{sunglow}{rgb}{1.0, 0.8, 0.2}
 
 \author{Eric Rexstad, David L. Miller, Laura Marshall and Len Thomas}
 \title{\parbox{0.53\linewidth}{\centering Migrating distance sampling projects from Distance for Windows to the Distance R package}}
@@ -124,7 +125,7 @@
 \column{0.333}
 
 \block{Introduction}{
-The Distance software \citep{thomas_distance_2010} has been downloaded >40,000 times in its 20-year history.   It consists of a Windows-based Graphical User Interface (GUI) that gives users ready access to survey design tools (written in Visual Basic) and analysis engines (written in FORTRAN and, more recently, R). For some users, there my be benifits to performing their analyses directly with the underlying R code, rather than working with the GUI.
+The Distance software \citep{thomas_distance_2010} has been downloaded >40,000 times in its 20-year history.   It consists of a Windows-based Graphical User Interface (GUI) that gives users ready access to survey design tools (written in Visual Basic) and analysis engines (written in FORTRAN and, more recently, R). For some users, there may be benefits to performing their analyses directly with the underlying R code, rather than working with the GUI.
 	\begin{tikzfigure}%[Traditional Distance for Windows interface (left) and distance sampling analysis in R (right).]
 		\includegraphics[width=0.95\linewidth]{merged-grabs.png}
 	\end{tikzfigure}
@@ -134,11 +135,13 @@ Challenges hindering the transition between analysis with the GUI and analyses i
 	\item Legacy data reside in Distance (GUI) projects, unavailable for importing into R, and
 	\item Analyses that are easily described using the GUI may be difficult to specify, particularly if analyst is not proficient in R.
 \end{itemize}
+
+This poster describes an R package, \texttt{readdst}, intended to alleviate these challenges.
 }
 
-\note[rotate=8, connection, width = 7cm, % targetoffsety=-2cm,
-% roundedcorners=15, targetoffsetx=2cm
-]{How to make this transition?}
+%\note[rotate=8, connection, width = 7cm, % targetoffsety=-2cm,
+%% roundedcorners=15, targetoffsetx=2cm
+%]{How to make this transition?}
 
 \block{Getting data out of Distance}{
 
@@ -166,10 +169,17 @@ Distance sampling analysis are defined in Distance project files (an Access data
 
 }
 
+%\block{}{
+%\coloredbox[bgcolor=sunglow]{University of St. Andrews is a charity registered in Scotland: SCO13532}
+%}
+
+% https://tex.stackexchange.com/questions/412271/page-spanning-text-on-the-left-side-of-tikzposter
+\node [font=\Large, color=sunglow] at ([xshift=14cm, yshift=2cm]bottomleft) {The University of St. Andrews is a charity registered in Scotland: SCO13532};
+
 \column{0.3333}
 \block{Converting Distance projects to R}
 {
-	Workhorse function in \texttt{readdst} package is \texttt{convert\_projects()}.  Its single argument is simply the path to an existing Distance GUI project (created by Distance 6 or 7).  \texttt{convert\_projects()} interrogates the Access database and translates the contents of database tables into an R object of class \texttt{converted\_distance\_analyses}, a list of lists of class \texttt{converted\_distance\_analysis}.
+	Workhorse function in \texttt{readdst} package is \texttt{convert\_projects()}.  Its single argument is the absolute path to an existing Distance GUI project (created by Distance 6 or 7).  \texttt{convert\_projects()} interrogates the Access database and translates the contents of database tables into an R object of class \texttt{converted\_distance\_analyses}, a list of lists of class \texttt{converted\_distance\_analysis}.
 }
 	
 %	
@@ -252,13 +262,13 @@ Distance sampling analysis are defined in Distance project files (an Access data
 
 \block{Comparative analysis of data sets}{
 	
-	The \texttt{test\_stats()} function in \texttt{readdst} performs the analysis residing in the call element of the \texttt{converted\_distance\_analysis}, producing estimates of parameters of distance sampling analyses (\emph{e.g.} AIC scores, $\hat{P}_a$, $\hat{D}$, $\hat{D}$ and associated measures of precision).  These results are contrasted with estimates of the same parameters stored in the Access data base, as computed by the Distance GUI.
+	The \texttt{test\_stats()} function in \texttt{readdst} performs the analysis residing in the \texttt{call} element of the \texttt{converted\_distance\_analysis}, producing estimates of parameters of distance sampling analyses (\emph{e.g.} AIC scores, $\hat{P}_a$, $\hat{D}$, $\hat{D}$ and associated measures of precision).  These results are contrasted with estimates of the same parameters stored in the Access data base, as computed by the Distance GUI.
 	
 	The resulting comparison is produced in tabular form with the difference between estimates presented as proportions.  Those comparative estimates within a specified tolerance are designated with \textbf{X}.
 	\lstset{backgroundcolor=\color{white}, keywordstyle=\color{blue}, stringstyle=\color{mymauve}, basicstyle=\normalsize}
 	\lstinputlisting[fontadjust]{stat-table.txt}
 	
-	This testing capability is part of our strategy to migrate software development from the existing Distance GUI to R packages.  We can check consistency of results between the Distance GUI and developing R code.
+	This testing capability assists our strategy to migrate software development from the existing Distance GUI to R packages.  We can check consistency of results between the Distance GUI and developing R code.
 }
 
 \block{Caveats}{
